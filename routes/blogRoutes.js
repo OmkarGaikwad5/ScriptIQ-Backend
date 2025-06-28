@@ -1,4 +1,6 @@
 const express = require("express");
+const protect = require("../middleware/authMiddleware");
+const upload = require("../middleware/upload"); // ✅ Correct import
 const {
   createBlog,
   getAllBlogs,
@@ -6,11 +8,15 @@ const {
   updateBlog,
   deleteBlog,
 } = require("../controllers/blogController");
-const protect = require("../middleware/authMiddleware");
+
 
 const router = express.Router();
 
-router.route("/").get(getAllBlogs).post(protect, createBlog);
+router.route("/").get(getAllBlogs);
+
+// ✅ This now works properly
+router.post("/create", protect, upload.single("image"), createBlog);
+
 router
   .route("/:slug")
   .get(getBlogBySlug)
@@ -18,4 +24,3 @@ router
   .delete(protect, deleteBlog);
 
 module.exports = router;
-// This code defines the routes for blog-related operations in a Node.js application using Express.
