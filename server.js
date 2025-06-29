@@ -8,7 +8,16 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  "https://scriptiq-chi.vercel.app", // ✅ your deployed frontend
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));
